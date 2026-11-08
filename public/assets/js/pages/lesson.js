@@ -34,6 +34,19 @@
       } else if (q.type === 'compare') {
         body = `<div class="flex gap-2.5 mt-3">${['>', '<', '='].map(s => `
           <button type="button" data-q="${q.id}" data-val="${s}" class="opt-btn w-14 h-14 rounded-2xl bg-surface-container-low font-headline-lg text-primary">${s}</button>`).join('')}</div>`;
+      } else if (q.type === 'estimate') {
+        body = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+            <div class="p-3 bg-surface-container-low rounded-2xl border border-secondary/30">
+              <span class="text-label-sm text-secondary font-bold block mb-1">Bước 1: Ước lượng (làm tròn hàng chục)</span>
+              <input data-q="${q.id}" data-part="estimate" type="text" inputmode="numeric" placeholder="Số ước lượng..." class="w-full h-12 text-center rounded-xl bg-surface-container-lowest text-primary font-headline-md focus:outline-none focus:ring-2 focus:ring-secondary"/>
+            </div>
+            <div class="p-3 bg-surface-container-low rounded-2xl border border-tertiary/30">
+              <span class="text-label-sm text-tertiary font-bold block mb-1">Bước 2: Kết quả chính xác</span>
+              <input data-q="${q.id}" data-part="exact" type="text" inputmode="numeric" placeholder="Kết quả đúng..." class="w-full h-12 text-center rounded-xl bg-surface-container-lowest text-primary font-headline-md focus:outline-none focus:ring-2 focus:ring-tertiary"/>
+            </div>
+          </div>
+        `;
       } else {
         body = `<input data-q="${q.id}" type="text" inputmode="numeric" placeholder="Điền đáp số..." class="mt-3 w-56 h-14 text-center rounded-2xl bg-surface-container-low text-primary font-headline-lg focus:outline-none focus:ring-4 focus:ring-primary-fixed"/>`;
       }
@@ -50,12 +63,32 @@
         b.classList.toggle('ring-primary-fixed-dim', b === btn));
       updateProgress();
     }));
-    container.querySelectorAll('input[data-q]').forEach(inp => inp.addEventListener('input', () => { answers[inp.dataset.q] = inp.value.trim(); updateProgress(); }));
+    container.querySelectorAll('input[data-q]').forEach(inp => inp.addEventListener('input', () => {
+      const qid = inp.dataset.q;
+      const part = inp.dataset.part;
+      if (part) {
+        if (!answers[qid] || typeof answers[qid] !== 'object') answers[qid] = {};
+        answers[qid][part] = inp.value.trim();
+      } else {
+        answers[qid] = inp.value.trim();
+      }
+      updateProgress();
+    }));
     updateProgress();
   }
 
   async function init() {
-    if (!setId) { container.innerHTML = '<p class="font-body-md">Thiếu mã bộ bài. Em quay lại Mục Lục chọn bài nhé!</p>'; return; }
+    let activeSetId = setId;
+    if (!activeSetId && lessonId) {
+      try {
+        const { lessons } = await window.MathAPI.get('/api/lessons');
+        const found = lessons.find(l => l.id === lessonId);
+        if (found && found.questionSets && found.questionSets.length > 0) {
+          activeSetId = found.questionSets[0].id;
+        }
+      } catch (_) {}
+    }
+    if (!activeSetId) { container.innerHTML = '<p class="font-body-md p-6 text-center text-on-surface-variant font-bold">Thiếu mã bộ bài. Em quay lại Mục Lục chọn bài nhé!</p>'; return; }
     try {
       if (lessonId) {
         const { lessons } = await window.MathAPI.get('/api/lessons');
@@ -65,9 +98,9 @@
           document.getElementById('lesson-desc').textContent = lesson.description || '';
         }
       }
-      const data = await window.MathAPI.get(`/api/question-sets/${encodeURIComponent(setId)}/questions`);
+      const data = await window.MathAPI.get(`/api/question-sets/${encodeURIComponent(activeSetId)}/questions`);
       questions = data.questions;
-      document.getElementById('set-kind').textContent = `Bộ bài: ${setId} • ${questions.length} câu`;
+      document.getElementById('set-kind').textContent = `Bộ bài: ${activeSetId} • ${questions.length} câu`;
       render();
     } catch (err) { container.innerHTML = `<p class="font-body-md">Chưa tải được bài: ${err.message}</p>`; }
   }
@@ -76,7 +109,7 @@
     const missing = questions.length - Object.keys(answers).filter(k => String(answers[k]).trim() !== '').length;
     if (missing > 0 && !confirm(`Em còn ${missing} câu chưa trả lời. Vẫn nộp bài nhé?`)) return;
     try {
-      const r = await window.MathAPI.post('/api/submissions', { setId, answers, durationSec: Math.round((Date.now() - startedAt) / 1000) });
+      const r = await window.MathAPI.post('/api/submissions', { setId: activeSetId, answers, durationSec: Math.round((Date.now() - startedAt) / 1000) });
       const box = document.getElementById('lesson-result');
       box.classList.remove('hidden');
       box.innerHTML = `<div class="text-4xl mb-1">${r.scorePercent >= 80 ? '🎉' : r.scorePercent >= 50 ? '💪' : '🌱'}</div>
