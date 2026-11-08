@@ -78,7 +78,17 @@
   }
 
   async function init() {
-    if (!setId) { container.innerHTML = '<p class="font-body-md">Thiếu mã bộ bài. Em quay lại Mục Lục chọn bài nhé!</p>'; return; }
+    let activeSetId = setId;
+    if (!activeSetId && lessonId) {
+      try {
+        const { lessons } = await window.MathAPI.get('/api/lessons');
+        const found = lessons.find(l => l.id === lessonId);
+        if (found && found.questionSets && found.questionSets.length > 0) {
+          activeSetId = found.questionSets[0].id;
+        }
+      } catch (_) {}
+    }
+    if (!activeSetId) { container.innerHTML = '<p class="font-body-md p-6 text-center text-on-surface-variant font-bold">Thiếu mã bộ bài. Em quay lại Mục Lục chọn bài nhé!</p>'; return; }
     try {
       if (lessonId) {
         const { lessons } = await window.MathAPI.get('/api/lessons');
@@ -88,9 +98,9 @@
           document.getElementById('lesson-desc').textContent = lesson.description || '';
         }
       }
-      const data = await window.MathAPI.get(`/api/question-sets/${encodeURIComponent(setId)}/questions`);
+      const data = await window.MathAPI.get(`/api/question-sets/${encodeURIComponent(activeSetId)}/questions`);
       questions = data.questions;
-      document.getElementById('set-kind').textContent = `Bộ bài: ${setId} • ${questions.length} câu`;
+      document.getElementById('set-kind').textContent = `Bộ bài: ${activeSetId} • ${questions.length} câu`;
       render();
     } catch (err) { container.innerHTML = `<p class="font-body-md">Chưa tải được bài: ${err.message}</p>`; }
   }
@@ -99,7 +109,7 @@
     const missing = questions.length - Object.keys(answers).filter(k => String(answers[k]).trim() !== '').length;
     if (missing > 0 && !confirm(`Em còn ${missing} câu chưa trả lời. Vẫn nộp bài nhé?`)) return;
     try {
-      const r = await window.MathAPI.post('/api/submissions', { setId, answers, durationSec: Math.round((Date.now() - startedAt) / 1000) });
+      const r = await window.MathAPI.post('/api/submissions', { setId: activeSetId, answers, durationSec: Math.round((Date.now() - startedAt) / 1000) });
       const box = document.getElementById('lesson-result');
       box.classList.remove('hidden');
       box.innerHTML = `<div class="text-4xl mb-1">${r.scorePercent >= 80 ? '🎉' : r.scorePercent >= 50 ? '💪' : '🌱'}</div>

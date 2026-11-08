@@ -48,9 +48,15 @@
       return { status: 'dang-hoc', icon: '◐', text: 'Đang học', isLocked: false, canPractice: true };
     }
 
-    // Các bài thuộc Chủ đề 2 (Bài 9 - 15)
+    // Kiểm tra mở khóa liên tục: nếu bài trước đã hoàn thành thì mở khóa bài này
+    const prevNum = lesson.number - 1;
+    const prevProg = (data.userProgress || {})[`bai-${prevNum}`] || (data.userProgress || {})[prevNum];
+    if (prevProg && prevProg.completed) {
+      return { status: 'chua-bat-dau', icon: 'play_arrow', text: 'Bắt đầu học', isLocked: false, canPractice: true };
+    }
+
+    // Các bài thuộc Chủ đề 2 (Bài 9 - 15) khi chưa làm bài
     if (lesson.number >= 9 && lesson.number <= 15) {
-      // Nếu là học sinh Bảo Nam đã mở bài 9, 10
       if (lesson.number === 9) {
         return { status: 'hoan-thanh', icon: '✓', text: 'Xuất sắc', isLocked: false, canPractice: true };
       }
