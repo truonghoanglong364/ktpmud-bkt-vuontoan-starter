@@ -18,8 +18,8 @@
 |---|---|---|
 | Fork starter (`truonghoanglong364/ktpmud-bkt-vuontoan-starter`), pin tag `bkt-2026-v1` | Xong | Fork tại https://github.com/truonghoanglong364/ktpmud-bkt-vuontoan-starter — xác nhận tag `bkt-2026-v1` tồn tại trong fork |
 | Đọc `docs/architecture-reference.md` | Xong | — |
-| `REQUIREMENTS.md` v0.1 | Xong | `artifacts/REQUIREMENTS.md`, commit `[ĐIỀN SHA sau khi push]` |
-| `DECISIONS.md` v0.1 (ADR-001, 002, 003) | Xong | `artifacts/DECISIONS.md`, commit `[ĐIỀN SHA sau khi push]` |
+| `REQUIREMENTS.md` v0.1 | Xong | `artifacts/REQUIREMENTS.md`, commit `af96820` |
+| `DECISIONS.md` v0.1 (ADR-001, 002, 003) | Xong | `artifacts/DECISIONS.md`, commit `af96820` |
 | Acceptance criteria traceable tới B-01→B-12 | Xong | `REQUIREMENTS.md` §4 |
 | Kế hoạch test TC-01→TC-15 | Xong | `REQUIREMENTS.md` §6 |
 | Repo chạy được `npm ci && npm start` từ clean checkout | [TODO — kiểm tra sau khi clone fork] | CI run `[ĐIỀN LINK sau khi chạy workflow]` |
