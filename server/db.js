@@ -6,7 +6,51 @@
  */
 const fs = require('fs');
 const path = require('path');
-const Database = require('better-sqlite3');
+let Database;
+try {
+  Database = require('better-sqlite3');
+  new Database(':memory:').close();
+} catch (_) {
+  // Graceful fallback sang built-in node:sqlite cho Node 22+/24+ khi thiếu native C++ build tools
+  const { DatabaseSync } = require('node:sqlite');
+  Database = class extends DatabaseSync {
+    pragma(cmd) { try { this.exec('PRAGMA ' + cmd + ';'); } catch (_) {} }
+    transaction(fn) {
+      return (...args) => {
+        this.exec('BEGIN TRANSACTION');
+        try {
+          const res = fn(...args);
+          this.exec('COMMIT');
+          return res;
+        } catch (err) {
+          this.exec('ROLLBACK');
+          throw err;
+        }
+      };
+    }
+    prepare(sql) {
+      const stmt = super.prepare(sql);
+      const namedParams = [...sql.matchAll(/@([a-zA-Z0-9_]+)/g)].map(m => m[1]);
+      if (namedParams.length > 0) {
+        const origRun = stmt.run.bind(stmt);
+        const origGet = stmt.get.bind(stmt);
+        const origAll = stmt.all.bind(stmt);
+        const filterObj = (obj) => {
+          if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return obj;
+          const filtered = {};
+          for (const k of namedParams) {
+            if (k in obj) filtered[k] = obj[k];
+          }
+          return filtered;
+        };
+        stmt.run = (obj) => origRun(filterObj(obj));
+        stmt.get = (obj) => origGet(filterObj(obj));
+        stmt.all = (obj) => origAll(filterObj(obj));
+      }
+      return stmt;
+    }
+  };
+}
 const bcrypt = require('bcryptjs');
 
 // Khi deploy lên hosting có ổ đĩa bền (persistent disk), đặt DB_PATH trỏ vào đó

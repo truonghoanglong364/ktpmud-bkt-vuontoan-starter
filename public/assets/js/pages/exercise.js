@@ -7,7 +7,7 @@ let activeInputId = 'math-input-3';
 
   function setActiveInput(id) {
     activeInputId = id;
-    ['math-input-1', 'math-input-2', 'math-input-3'].forEach(name => {
+    ['math-input-1', 'math-input-2', 'math-input-3', 'math-est-1', 'math-exact-1'].forEach(name => {
       const el = document.getElementById(name);
       if (el) {
         if (name === id) {
@@ -27,6 +27,8 @@ let activeInputId = 'math-input-3';
     if (val === 'OK') {
       if (activeInputId === 'math-input-1') setActiveInput('math-input-2');
       else if (activeInputId === 'math-input-2') setActiveInput('math-input-3');
+      else if (activeInputId === 'math-input-3') setActiveInput('math-est-1');
+      else if (activeInputId === 'math-est-1') setActiveInput('math-exact-1');
       return;
     }
 
@@ -107,10 +109,12 @@ let activeInputId = 'math-input-3';
       }
     });
 
-    ['math-input-1', 'math-input-2', 'math-input-3'].forEach(id => {
+    ['math-input-1', 'math-input-2', 'math-input-3', 'math-est-1', 'math-exact-1'].forEach(id => {
       const inp = document.getElementById(id);
       if (inp) inp.value = '';
     });
+    const estBox = document.getElementById('estimate-feedback-box');
+    if (estBox) estBox.classList.add('hidden');
 
     alert("Đã làm mới lại phiếu bài tập. Chúc bé luyện tập vui vẻ!");
   }
@@ -130,6 +134,15 @@ let activeInputId = 'math-input-3';
       const label = btn.textContent;
       answers[`paint-${i + 1}`] = label.includes('Xanh') ? 'green' : label.includes('Vàng') ? 'yellow' : '';
     });
+
+    const estInput = document.getElementById('math-est-1');
+    const exactInput = document.getElementById('math-exact-1');
+    if (estInput && exactInput) {
+      answers['est-bai-9-10'] = {
+        estimate: estInput.value.trim(),
+        exact: exactInput.value.trim()
+      };
+    }
     return answers;
   }
 
@@ -146,6 +159,24 @@ let activeInputId = 'math-input-3';
         if (desc) desc.innerHTML = `Em làm đúng <strong>${result.correctCount}/${result.totalCount}</strong> phần, đạt <strong>${result.scorePercent}%</strong>` +
           (result.starsEarned ? ` và nhận thêm <strong class="text-tertiary">+${result.starsEarned} Sao</strong> vàng!` : ' (điểm chưa cao hơn lần tốt nhất nên chưa cộng thêm sao).') +
           `<br/>Điểm đã được lưu vào hồ sơ học tập của em.`;
+
+        const estBox = document.getElementById('estimate-feedback-box');
+        const estContent = document.getElementById('estimate-feedback-content');
+        if (estBox && estContent && Array.isArray(result.detail)) {
+          const estDetail = result.detail.find(d => d.type === 'estimate');
+          if (estDetail) {
+            estBox.classList.remove('hidden');
+            const estBadge = estDetail.estimateOk 
+              ? '<span class="px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-bold text-[11px]">✓ Ước lượng hợp lý</span>'
+              : '<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-bold text-[11px]">✗ Ước lượng chưa sát</span>';
+            const exactBadge = estDetail.exactOk
+              ? '<span class="px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-bold text-[11px]">✓ Tính chính xác</span>'
+              : '<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-bold text-[11px]">✗ Kết quả chưa đúng</span>';
+            estContent.innerHTML = `<div class="flex items-center gap-2 mb-1">${estBadge} ${exactBadge}</div><p class="mt-1 text-on-surface-variant font-medium">${estDetail.feedbackMessage}</p>`;
+          } else {
+            estBox.classList.add('hidden');
+          }
+        }
         modal.classList.remove('hidden');
       }
     } catch (err) {

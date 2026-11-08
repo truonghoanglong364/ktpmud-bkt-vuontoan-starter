@@ -9,107 +9,93 @@
 ---
 
 # 🌱 Vườn Toán Lớp 3 — Trường Tiểu học Hoàng Mai
+## Nâng cấp Track B: Dạng bài "Ước lượng trước khi tính đúng"
 
-Web học Toán lớp 3 gồm giao diện học sinh (bài học, luyện tập, kiểm tra, trò chơi, bảng xếp hạng)
-và khu vực giáo viên (theo dõi lớp, cấp tài khoản). Đợt 1 đã nối **backend thật**:
-đăng nhập/đăng xuất, chấm điểm trên server, lưu điểm & tiến độ vào cơ sở dữ liệu SQLite.
+Nền tảng học Toán Lớp 3 tương tác (Node.js/Express + SQLite + HTML/JS tĩnh). Dự án đã được mở rộng hoàn chỉnh luồng nghiệp vụ (vertical slice) cho dạng bài **"Ước lượng trước khi tính đúng"**, đáp ứng trọn vẹn $12/12$ Acceptance Criteria (B-01 đến B-12) và chuẩn bị đầy đủ hồ sơ Checkpoint 1 & Checkpoint 2.
 
-## 1. Cách chạy
+---
 
-Yêu cầu: máy có **Node.js 18+**.
+## 1. Hướng dẫn Chạy & Kiểm thử Tự động
+
+Yêu cầu môi trường: **Node.js 18+** (Hỗ trợ Node 18, 20 LTS và Node 22/24).
 
 ```bash
-npm install     # chỉ cần chạy 1 lần đầu
-npm start       # mở http://localhost:3000
+# 1. Cài đặt dependencies từ clean checkout (B-09)
+npm ci
+# hoặc: npm install
+
+# 2. Chạy bộ kiểm thử tự động (21 test cases - B-08, B-09)
+npm test
+
+# 3. Khởi tạo lại cơ sở dữ liệu mẫu từ seed.json
+npm run reset-db
+
+# 4. Khởi động máy chủ ứng dụng
+npm start
+# Truy cập giao diện tại: http://localhost:3000
 ```
 
-Lần chạy đầu, server tự tạo `data/vuon-toan.db` và nạp dữ liệu mẫu từ `data/seed.json`.
-
-### Tài khoản mẫu
+### Tài khoản đăng nhập mẫu (Synthetic Data - B-11)
 
 | Vai trò | Tên đăng nhập | Mật khẩu | Ghi chú |
 |---|---|---|---|
-| Học sinh | `hocsinh01` … `hocsinh99` | `123456` | 99 tài khoản giả lập lớp 3A2, dùng cho test/demo hackathon — không phải học sinh thật |
-| Giáo viên | `giaovien01` | `123456` | Vào thẳng Góc Giáo Viên |
+| Học sinh | `hocsinh01` … `hocsinh99` | `123456` | 99 tài khoản synthetic, điểm và tiến độ lưu SQLite |
+| Giáo viên | `giaovien01` | `123456` | Quản lý học sinh, thống kê bài học |
 
-> Khi đưa lên Internet thật: đổi mật khẩu các tài khoản mẫu, và đặt biến môi trường
-> `SESSION_SECRET` bằng một chuỗi bí mật dài trước khi chạy `npm start`.
+---
 
-## 2. Cấu trúc thư mục
+## 2. Ma trận Đối chiếu 12 Tiêu chí Nghiệm thu (Track B)
+
+| Mã AC | Tiêu chí Nghiệm thu | Hiện thực hóa kỹ thuật trong Codebase | Trạng thái |
+|---|---|---|---|
+| **B-01** | Truy cập từ luồng học hiện có | Tích hợp vào bài tập Bài 9 & 10 tại `public/exercise.html` và bộ đề `phieu-uoc-luong-lop-3`. | ✅ Hoàn thành |
+| **B-02** | Tối thiểu 12 fixture synthetic | Đã thêm 12 câu hỏi synthetic tái lập được trong `data/seed.json` (`phieu-uoc-luong-lop-3`). | ✅ Hoàn thành |
+| **B-03** | Quy tắc toán tất định, kiểm thử được | Xây dựng `server/estimation-engine.js` làm tròn hàng chục gần nhất, không dùng AI runtime. | ✅ Hoàn thành |
+| **B-04** | API không trả đáp án trước khi nộp | Endpoint `GET /api/question-sets/:setId/questions` bảo mật, không select `correct_answer`. | ✅ Hoàn thành |
+| **B-05** | Server chấm & lưu kết quả bền vững | Chấm tập trung tại `POST /api/submissions`, transaction lưu `attempts` & `progress`. | ✅ Hoàn thành |
+| **B-06** | Feedback phân biệt rõ 2 bước | Trả `estimateOk`, `exactOk` và nhận xét sư phạm riêng biệt của Ong Vàng trên UI. | ✅ Hoàn thành |
+| **B-07** | Không sửa `server/auth.js` | Giữ nguyên $100\%$ module xác thực và session cookies. | ✅ Hoàn thành |
+| **B-08** | Test tự động normal/boundary/invalid | Test suite 21 bài kiểm thử trong `test/` bao phủ mọi ca biên, số tận cùng bằng 5, chuỗi rác. | ✅ Hoàn thành |
+| **B-09** | Thêm lệnh `npm test` chạy sạch | Script `"test": "node --test test/**/*.test.js"` chạy sạch từ clean checkout. | ✅ Hoàn thành |
+| **B-10** | CI GitHub Actions trên PR | Cấu hình `.github/workflows/ci.yml` chạy `npm ci` & `npm test` trên Node 18 & 20. | ✅ Hoàn thành |
+| **B-11** | Không có PII/secret | Chỉ sử dụng dữ liệu synthetic, rà soát an toàn thông tin giáo dục. | ✅ Hoàn thành |
+| **B-12** | Hỗ trợ bàn phím & thông báo lỗi rõ ràng | Hỗ trợ Tab, Enter, số, bàn phím ảo, thông báo lỗi bằng tiếng Việt gần gũi. | ✅ Hoàn thành |
+
+---
+
+## 3. Hồ sơ Báo cáo Kỹ thuật Bàn giao
+
+Nhóm đã hoàn thành trọn bộ 3 tài liệu theo chuẩn Rubric chấm điểm:
+- 📄 [REQUIREMENTS.md](file:///d:/ktpmud-bkt-vuontoan-starter/REQUIREMENTS.md): Đặc tả yêu cầu phần mềm, bối cảnh sư phạm Toán lớp 3, phạm vi và Traceability Matrix.
+- 📐 [DECISIONS.md](file:///d:/ktpmud-bkt-vuontoan-starter/DECISIONS.md): Hồ sơ Kiến trúc & Quyết định Kỹ thuật (ADR), phân tích Trade-offs, sơ đồ kiến trúc C4 và Sequence Diagram.
+- 📝 [AI_USE.md](file:///d:/ktpmud-bkt-vuontoan-starter/AI_USE.md): Nhật ký sử dụng AI, quy trình thẩm định logic toán học, bảo mật, tương thích runtime và bộ câu hỏi vấn đáp Viva.
+
+---
+
+## 4. Cấu trúc Thư mục Codebase
 
 ```
-vuon-toan-lop-3/
-├─ public/                    # Giao diện (server phục vụ thư mục này)
-│  ├─ *.html                  # Mỗi trang 1 file, CHỈ chứa nội dung trang
-│  └─ assets/
-│     ├─ css/app.css          # CSS nền dùng chung (trước đây lặp trong 11 file)
-│     └─ js/
-│        ├─ tailwind.config.js  # Cấu hình Tailwind dùng chung 1 chỗ duy nhất
-│        ├─ core/  (api.js = gọi API, app.js = đăng nhập + nối link, game-score.js = lưu điểm game)
-│        ├─ components/ (navbar.js, sidebar.js=bản đồ link, footer.js dùng chung)
-│        └─ pages/  (logic riêng từng trang: login.js, exercise.js, exam.js,...)
-├─ public/lesson.html       # Trang làm bài chung cho bộ đề giáo viên tự tạo
+ktpmud-bkt-vuontoan-starter/
+├─ .github/workflows/ci.yml     # CI Pipeline GitHub Actions (B-10)
+├─ REQUIREMENTS.md              # Hồ sơ phân tích yêu cầu & ACs (14 điểm)
+├─ DECISIONS.md                 # Hồ sơ thiết kế kiến trúc & ADR (18 điểm)
+├─ AI_USE.md                    # Nhật ký sử dụng AI & thẩm định (Bắt buộc)
 ├─ server/
-│  ├─ index.js   # Điểm vào: API /api/* + phục vụ giao diện
-│  ├─ db.js      # Tạo bảng + nạp dữ liệu mẫu vào SQLite
-│  ├─ auth.js    # Cookie đăng nhập httpOnly, băm mật khẩu bcrypt
-│  └─ api.js     # Toàn bộ API (đăng nhập, bài học, nộp bài, giáo viên...)
+│  ├─ estimation-engine.js      # BỘ MÁY ƯỚC LƯỢNG & CHẤM ĐIỂM TẤT ĐỊNH (Mới)
+│  ├─ api.js                    # REST API, chấm điểm submissions trên server
+│  ├─ db.js                     # Adapter SQLite (hỗ trợ better-sqlite3 + node:sqlite)
+│  ├─ auth.js                   # Xác thực cookie httpOnly (Bảo toàn 100% - B-07)
+│  └─ index.js                  # Entry point Express app
+├─ test/
+│  ├─ estimation-engine.test.js # Unit test quy tắc làm tròn, scoring, invalid input
+│  ├─ fixtures.test.js          # Kiểm thử 12 synthetic fixtures trong seed (B-02)
+│  └─ integration.test.js       # Kiểm thử luồng nộp bài, tính sao, bảo mật B-04
+├─ public/
+│  ├─ exercise.html             # Giao diện luyện tập: Tích hợp Bài tập 4 Ước lượng
+│  └─ assets/js/pages/
+│     └─ exercise.js            # Logic thu thập đáp án, phím ảo & hiển thị feedback
 ├─ data/
-│  ├─ seed.json      # DỮ LIỆU GỐC: tài khoản mẫu, bài học, câu hỏi
-│  └─ vuon-toan.db   # CSDL SQLite (tự sinh khi chạy; sao lưu = chép file này)
-├─ tools/build-from-original.py  # Dựng lại giao diện từ bản gốc khi cần
-├─ original-backup/  # NGUYÊN BẢN code cũ trước khi sửa (để đối chiếu/khôi phục)
-└─ HUONG-DAN-THEM-BAI.md  # Cách thêm bài học/câu hỏi mới
+│  ├─ seed.json                 # Dữ liệu gốc: Thêm bộ đề phieu-uoc-luong-lop-3 (12 câu)
+│  └─ vuon-toan.db              # CSDL SQLite tự động nạp từ seed
+└─ package.json                 # Cấu hình dự án, bổ sung script "npm test"
 ```
-
-## 3. API chính
-
-| Method | Đường dẫn | Mô tả |
-|---|---|---|
-| POST | `/api/auth/login` · `/api/auth/logout` | Đăng nhập (cookie httpOnly) / đăng xuất |
-| GET | `/api/auth/me` | Thông tin người đang đăng nhập |
-| GET | `/api/lessons`, `/api/me/progress` | Bài học kèm tiến độ, khóa/mở theo thứ tự |
-| GET | `/api/question-sets/:id/questions` | Câu hỏi — **không kèm đáp án** |
-| POST | `/api/submissions` | Nộp bài; server chấm, lưu điểm, cộng sao theo tiến bộ |
-| GET | `/api/leaderboard` | Bảng xếp hạng tính từ sao thật trong DB |
-| GET/POST | `/api/teacher/students` | Giáo viên xem / cấp tài khoản học sinh |
-| POST | `/api/teacher/students/:id/reset-password` | Giáo viên đặt lại mật khẩu |
-
-## 4. Đã làm ở Đợt 1 (cốt lõi)
-
-- Tách cấu hình Tailwind + CSS + JS dùng chung (trước: sao chép vào cả 11 file HTML);
-  sửa tên file sai chính tả (`excersise→exercise`, `leadboard→leaderboard`, `schudule→schedule`).
-- Nối lại toàn bộ link menu từng là `href="#"` sang trang thật.
-- Backend Node.js + Express + SQLite; mật khẩu băm bcrypt; phân quyền học sinh/giáo viên.
-- Trang chủ render bài học từ API; luyện tập & kiểm tra (20 câu, đếm giờ, tự nộp khi hết giờ)
-  chấm điểm trên server và lưu tiến độ — tải lại trang không mất điểm.
-- Góc Giáo Viên: xem danh sách lớp với điểm trung bình thật, **cấp tài khoản + đặt lại mật khẩu** cho học sinh.
-
-## 5. Đợt 2 (đã hoàn thành)
-
-- **4 mini-game chơi thật & lưu điểm**: Bắn Bóng (10 vòng phép nhân), Đua Xe (chọn cổng đáp án),
-  Lật Thẻ Trí Nhớ (ghép cặp phép tính–kết quả), Câu Cá (10 vòng phép chia). Điểm gửi lên server,
-  sao chỉ cộng theo phần vượt kỷ lục cũ của từng em.
-- **Bảng xếp hạng render 100% từ dữ liệu thật** (`/api/leaderboard`): hạng, lượt làm bài, điểm TB, tổng sao.
-- **Trang làm bài chung `lesson.html`**: mọi bộ đề giáo viên tạo đều làm được tại đây
-  (`lesson.html?lesson=bai-16&set=...`), hỗ trợ trắc nghiệm / điền số / điền dấu / tô màu.
-- **Quản trị trên web (Góc Giáo Viên)**: thêm/sửa/xóa bài học, tạo bộ đề, thêm/sửa/xóa câu hỏi,
-  xuất báo cáo lớp ra CSV mở bằng Excel. Học sinh không vào được khu vực này.
-
-## 6. Đợt 3 (đã hoàn thành)
-
-- **Đăng nhập dự phòng 2 lớp**: cookie httpOnly + Bearer token trong trình duyệt
-  (tự động dùng khi cookie bị chặn, ví dụ xem qua khung iframe/xem trước).
-- **Thống kê lớp thật** (`/api/teacher/analytics`): 4 thẻ KPI đầu trang Góc Giáo Viên đã là số thật,
-  thêm biểu đồ lượt làm bài 7 ngày, top 3 dạng bài hay sai nhất, tiến độ từng bài học.
-  Hai khối biểu đồ/chẩn đoán mẫu cũ được ẩn để tránh nhầm số liệu.
-- **CSS Tailwind tĩnh** (`assets/css/tailwind.build.css`, chạy `npm run build:css` để gói lại):
-  phòng máy mất Internet giao diện vẫn giữ nguyên; CDN chỉ còn là lớp dự phòng.
-- **Sẵn sàng deploy**: endpoint `/api/health`, hỗ trợ `DB_PATH` cho ổ đĩa bền,
-  `Dockerfile` + `DEPLOY.md` (VPS/Render/Railway, việc cần làm với `SESSION_SECRET` và mật khẩu mẫu).
-
-## 7. Nếu muốn làm tiếp
-
-- Nhúng font/icon tại chỗ để offline 100% cả chữ và biểu tượng.
-- Thực hiện deploy thật (cần tài khoản hosting/tên miền của trường).
-- Thêm biểu đồ theo tuần/tháng và xuất phiếu bồi dưỡng PDF theo dạng bài hay sai.

@@ -1627,6 +1627,14 @@
           "prompt": "54 : 3",
           "correctAnswer": "yellow",
           "points": 2
+        },
+        {
+          "id": "est-bai-9-10",
+          "type": "estimate",
+          "prompt": "Bác ong mật bay qua 3 vườn hoa, mỗi vườn ong hút được mật từ 48 bông hoa. Em hãy ước lượng và tính xem bác ong hút mật từ tất cả bao nhiêu bông hoa?",
+          "correctAnswer": "{\"estimate\":150,\"exact\":144,\"formula\":\"48 × 3\",\"roundedFormula\":\"50 × 3 = 150\",\"explanation\":\"Làm tròn 48 lên 50. Ước lượng: 50 × 3 = 150 bông hoa. Tính đúng: 48 × 3 = 144 bông hoa.\"}",
+          "points": 10,
+          "category": "multiplication"
         }
       ]
     },
@@ -3017,6 +3025,111 @@
           "prompt": "Thư viện Hoàng Mai có 54.198 quyển sách, thư viện bạn có 54.285 quyển. Sau khi Hoàng Mai nhận thêm 97 quyển, thư viện nào có nhiều sách hơn? Viết số sách của thư viện nhiều hơn.",
           "correctAnswer": "54295",
           "points": 5
+        }
+      ]
+    },
+    "phieu-uoc-luong-lop-3": {
+      "lessonId": "bai-10",
+      "title": "Phiếu bài tập: Ước lượng trước khi tính đúng (Nhân & Chia Lớp 3)",
+      "kind": "exercise",
+      "starReward": 40,
+      "durationMinutes": 15,
+      "questions": [
+        {
+          "id": "est-fixture-01",
+          "type": "estimate",
+          "prompt": "Bác nông dân thu hoạch được 3 sọt cam, mỗi sọt có 48 quả. Em hãy ước lượng và tính xem bác thu hoạch được tất cả bao nhiêu quả cam?",
+          "correctAnswer": "{\"estimate\":150,\"exact\":144,\"formula\":\"48 × 3\",\"roundedFormula\":\"50 × 3 = 150\",\"explanation\":\"Làm tròn 48 lên 50. Ước lượng: 50 × 3 = 150 quả. Tính đúng: 48 × 3 = 144 quả.\"}",
+          "points": 5,
+          "category": "multiplication"
+        },
+        {
+          "id": "est-fixture-02",
+          "type": "estimate",
+          "prompt": "Một cửa hàng có 4 thùng sữa tươi, mỗi thùng chứa 21 hộp. Em hãy ước lượng và tính tổng số hộp sữa trong cửa hàng.",
+          "correctAnswer": "{\"estimate\":80,\"exact\":84,\"formula\":\"21 × 4\",\"roundedFormula\":\"20 × 4 = 80\",\"explanation\":\"Làm tròn 21 xuống 20. Ước lượng: 20 × 4 = 80 hộp. Tính đúng: 21 × 4 = 84 hộp.\"}",
+          "points": 5,
+          "category": "multiplication"
+        },
+        {
+          "id": "est-fixture-03",
+          "type": "estimate",
+          "prompt": "Mỗi hàng cây có 35 cây phi lao. Hỏi 2 hàng cây như thế có bao nhiêu cây phi lao? Hãy ước lượng trước rồi tính kết quả chính xác.",
+          "correctAnswer": "{\"estimate\":80,\"exact\":70,\"formula\":\"35 × 2\",\"roundedFormula\":\"40 × 2 = 80\",\"explanation\":\"Số 35 tận cùng là 5 nên làm tròn lên 40. Ước lượng: 40 × 2 = 80 cây. Tính đúng: 35 × 2 = 70 cây.\"}",
+          "points": 5,
+          "category": "multiplication"
+        },
+        {
+          "id": "est-fixture-04",
+          "type": "estimate",
+          "prompt": "Một rạp chiếu phim mini có 3 dãy ghế, mỗi dãy có 62 chỗ ngồi. Hãy ước lượng và tính tổng số chỗ ngồi trong rạp.",
+          "correctAnswer": "{\"estimate\":180,\"exact\":186,\"formula\":\"62 × 3\",\"roundedFormula\":\"60 × 3 = 180\",\"explanation\":\"Làm tròn 62 xuống 60. Ước lượng: 60 × 3 = 180 chỗ. Tính đúng: 62 × 3 = 186 chỗ.\"}",
+          "points": 5,
+          "category": "multiplication"
+        },
+        {
+          "id": "est-fixture-05",
+          "type": "estimate",
+          "prompt": "Đoàn tàu hỏa có 2 toa chở hàng, mỗi toa chứa 79 bao xi măng. Hãy ước lượng và tính xem 2 toa chứa tất cả bao nhiêu bao xi măng.",
+          "correctAnswer": "{\"estimate\":160,\"exact\":158,\"formula\":\"79 × 2\",\"roundedFormula\":\"80 × 2 = 160\",\"explanation\":\"Làm tròn 79 lên 80. Ước lượng: 80 × 2 = 160 bao. Tính đúng: 79 × 2 = 158 bao.\"}",
+          "points": 5,
+          "category": "multiplication"
+        },
+        {
+          "id": "est-fixture-06",
+          "type": "estimate",
+          "prompt": "Vườn trường trồng 5 luống hoa hồng, mỗi luống có 44 bông. Em hãy ước lượng và tính xem có tất cả bao nhiêu bông hoa hồng.",
+          "correctAnswer": "{\"estimate\":200,\"exact\":220,\"formula\":\"44 × 5\",\"roundedFormula\":\"40 × 5 = 200\",\"explanation\":\"Làm tròn 44 xuống 40. Ước lượng: 40 × 5 = 200 bông. Tính đúng: 44 × 5 = 220 bông.\"}",
+          "points": 5,
+          "category": "multiplication"
+        },
+        {
+          "id": "est-fixture-07",
+          "type": "estimate",
+          "prompt": "Cô giáo có 84 quyển vở chia đều cho 4 tổ học tập. Hãy ước lượng nhẩm số vở mỗi tổ nhận được rồi tính kết quả chính xác.",
+          "correctAnswer": "{\"estimate\":20,\"exact\":21,\"formula\":\"84 : 4\",\"roundedFormula\":\"80 : 4 = 20\",\"explanation\":\"Làm tròn 84 xuống 80. Ước lượng: 80 : 4 = 20 quyển. Tính đúng: 84 : 4 = 21 quyển.\"}",
+          "points": 5,
+          "category": "division"
+        },
+        {
+          "id": "est-fixture-08",
+          "type": "estimate",
+          "prompt": "Một sợi dây dài 63 cm được cắt đều thành 3 đoạn bằng nhau. Em hãy ước lượng và tính độ dài chính xác của mỗi đoạn dây.",
+          "correctAnswer": "{\"estimate\":20,\"exact\":21,\"formula\":\"63 : 3\",\"roundedFormula\":\"60 : 3 = 20\",\"explanation\":\"Làm tròn 63 xuống 60. Ước lượng: 60 : 3 = 20 cm. Tính đúng: 63 : 3 = 21 cm.\"}",
+          "points": 5,
+          "category": "division"
+        },
+        {
+          "id": "est-fixture-09",
+          "type": "estimate",
+          "prompt": "Bác thợ may có 68 chiếc cúc áo, đem đính đều lên 2 chiếc áo măng tô. Hãy ước lượng và tính số cúc áo trên mỗi chiếc áo.",
+          "correctAnswer": "{\"estimate\":35,\"exact\":34,\"formula\":\"68 : 2\",\"roundedFormula\":\"70 : 2 = 35\",\"explanation\":\"Làm tròn 68 lên 70. Ước lượng: 70 : 2 = 35 chiếc. Tính đúng: 68 : 2 = 34 chiếc.\"}",
+          "points": 5,
+          "category": "division"
+        },
+        {
+          "id": "est-fixture-10",
+          "type": "estimate",
+          "prompt": "Có 96 viên bi chia đều vào 4 hộp nhỏ. Hãy ước lượng và tính số viên bi đựng trong mỗi hộp.",
+          "correctAnswer": "{\"estimate\":25,\"exact\":24,\"formula\":\"96 : 4\",\"roundedFormula\":\"100 : 4 = 25\",\"explanation\":\"Làm tròn 96 lên 100. Ước lượng: 100 : 4 = 25 viên. Tính đúng: 96 : 4 = 24 viên.\"}",
+          "points": 5,
+          "category": "division"
+        },
+        {
+          "id": "est-fixture-11",
+          "type": "estimate",
+          "prompt": "Bác thủ thư xếp 76 cuốn sách lên 2 tầng giá sách sao cho số sách mỗi tầng bằng nhau. Ước lượng và tính số sách ở mỗi tầng.",
+          "correctAnswer": "{\"estimate\":40,\"exact\":38,\"formula\":\"76 : 2\",\"roundedFormula\":\"80 : 2 = 40\",\"explanation\":\"Làm tròn 76 lên 80. Ước lượng: 80 : 2 = 40 cuốn. Tính đúng: 76 : 2 = 38 cuốn.\"}",
+          "points": 5,
+          "category": "division"
+        },
+        {
+          "id": "est-fixture-12",
+          "type": "estimate",
+          "prompt": "Chia đều 95 kg gạo vào 5 bao tải nhỏ. Em hãy ước lượng số gạo trong mỗi bao rồi tính kết quả chính xác.",
+          "correctAnswer": "{\"estimate\":20,\"exact\":19,\"formula\":\"95 : 5\",\"roundedFormula\":\"100 : 5 = 20\",\"explanation\":\"Số 95 tận cùng là 5 nên làm tròn lên 100. Ước lượng: 100 : 5 = 20 kg. Tính đúng: 95 : 5 = 19 kg.\"}",
+          "points": 5,
+          "category": "division"
         }
       ]
     }

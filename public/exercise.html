@@ -258,6 +258,70 @@
 </button>
 </div>
 </section>
+
+<!-- EXERCISE 4: DẠNG BÀI ƯỚC LƯỢNG TRƯỚC KHI TÍNH ĐÚNG (TRACK B) -->
+<section class="bg-surface-container-lowest rounded-lg p-space-md lg:p-space-lg shadow-sm relative overflow-hidden border-2 border-primary/20">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="w-9 h-9 rounded-full bg-primary text-on-primary font-headline-sm text-label-lg flex items-center justify-center shadow-[0_3px_0_0_#004419]">4</span>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Thử tài ước lượng: Ước lượng trước khi tính đúng</h3>
+<p class="text-label-sm text-on-surface-variant">Làm tròn số về hàng chục gần nhất để tính nhẩm trước nhé!</p>
+</div>
+</div>
+<span class="text-label-sm font-label-sm px-2.5 py-1 rounded-full bg-surface-container-low text-primary font-bold">+10 sao</span>
+</div>
+
+<div class="p-3.5 bg-surface-container-low rounded-DEFAULT mb-space-md flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[28px]">local_florist</span>
+<p class="font-body-md text-on-surface leading-relaxed">
+Bác ong mật bay qua <strong>3</strong> vườn hoa, mỗi vườn ong hút được mật từ <strong>48</strong> bông hoa. 
+Em hãy thực hiện phép tính <span class="px-2 py-0.5 rounded-lg bg-surface-container-lowest font-headline-sm text-primary">48 × 3</span> theo 2 bước:
+</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Bước 1 -->
+<div class="p-space-sm bg-surface-container-lowest border-2 border-dashed border-secondary/40 rounded-2xl flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-headline-sm text-label-sm">Bước 1: Ước lượng</span>
+<span class="text-label-sm text-secondary font-semibold">Làm tròn 48 → 50</span>
+</div>
+<p class="text-label-md text-on-surface-variant mb-3">Tính nhẩm: 50 × 3 = ?</p>
+</div>
+<div class="flex items-center justify-between gap-3 pt-2 border-t border-surface-container-low">
+<label for="math-est-1" class="font-headline-sm text-primary">Khoảng ước lượng:</label>
+<input id="math-est-1" type="text" placeholder="?" 
+       class="w-24 h-14 text-center rounded-2xl bg-surface-container-low text-primary font-headline-lg text-headline-lg focus:outline-none focus:ring-4 focus:ring-secondary-fixed shadow-[0_3px_0_0_#bfcabb] cursor-pointer"
+       onclick="setActiveInput('math-est-1')" aria-label="Nhập giá trị ước lượng" />
+</div>
+</div>
+
+<!-- Bước 2 -->
+<div class="p-space-sm bg-surface-container-lowest border-2 border-dashed border-tertiary/40 rounded-2xl flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-headline-sm text-label-sm">Bước 2: Tính chính xác</span>
+<span class="text-label-sm text-tertiary font-semibold">Đặt tính rồi tính</span>
+</div>
+<p class="text-label-md text-on-surface-variant mb-3">Kết quả chính xác: 48 × 3 = ?</p>
+</div>
+<div class="flex items-center justify-between gap-3 pt-2 border-t border-surface-container-low">
+<label for="math-exact-1" class="font-headline-sm text-primary">Kết quả đúng:</label>
+<input id="math-exact-1" type="text" placeholder="?" 
+       class="w-24 h-14 text-center rounded-2xl bg-surface-container-low text-primary font-headline-lg text-headline-lg focus:outline-none focus:ring-4 focus:ring-tertiary-fixed shadow-[0_3px_0_0_#bfcabb] cursor-pointer"
+       onclick="setActiveInput('math-exact-1')" aria-label="Nhập kết quả chính xác" />
+</div>
+</div>
+</div>
+
+<div class="mt-space-sm flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[18px]">info</span>
+<span>Bé có thể dùng bàn phím máy tính hoặc chạm vào bàn phím ảo bên trên để nhập số nhé!</span>
+</div>
+</section>
+
 </div>
 <!-- Right Column: Helper Mascot & Pedagogical Insights (Col 4) -->
 <div class="lg:col-span-4 flex flex-col gap-space-md">
@@ -373,7 +437,14 @@
 </div>
 <div class="flex-1">
 <h4 class="font-headline-md text-headline-md text-primary">Xuất sắc quá em ơi!</h4>
-<p class="font-body-md text-body-md text-on-surface-variant">Em đã hoàn thành chính xác 100% các phép tính và thu thập trọn vẹn <strong class="text-tertiary">+40 Sao</strong> vàng!</p>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2">Em đã hoàn thành chính xác 100% các phép tính và thu thập trọn vẹn <strong class="text-tertiary">+40 Sao</strong> vàng!</p>
+<div id="estimate-feedback-box" class="p-3 bg-surface-container-low rounded-xl text-left hidden border border-primary/20">
+  <div class="flex items-center gap-2 mb-1">
+    <span class="material-symbols-outlined text-primary text-[20px]">psychology</span>
+    <span class="font-headline-sm text-label-md text-primary font-bold">Nhận xét từ Ong Vàng về dạng bài Ước Lượng:</span>
+  </div>
+  <div id="estimate-feedback-content" class="text-label-sm text-on-surface space-y-1"></div>
+</div>
 </div>
 <button class="w-10 h-10 rounded-full bg-surface-container text-on-surface flex items-center justify-center" onclick="closeModal()">
 <span class="material-symbols-outlined">close</span>

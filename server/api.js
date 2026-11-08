@@ -8,6 +8,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const db = require('./db');
 const { setAuthCookie, clearAuthCookie, requireAuth, requireTeacher } = require('./auth');
+const { evaluateEstimateAnswer } = require('./estimation-engine');
 
 const router = express.Router();
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -174,10 +175,26 @@ router.post('/submissions', requireAuth, (req, res) => {
   let earned = 0, max = 0, correct = 0;
   const detail = questions.map(q => {
     max += q.points;
+    if (q.type === 'estimate') {
+      const evalRes = evaluateEstimateAnswer(q.correct_answer, answers[q.id]);
+      if (evalRes.isCorrect) {
+        earned += q.points;
+        correct++;
+      }
+      return {
+        questionId: q.id,
+        type: q.type,
+        correct: evalRes.isCorrect,
+        estimateOk: evalRes.estimateOk,
+        exactOk: evalRes.exactOk,
+        feedbackMessage: evalRes.feedbackMessage,
+        correctAnswer: evalRes.expectedAnswer
+      };
+    }
     const given = answers[q.id] == null ? '' : String(answers[q.id]).trim().toLowerCase();
     const ok = given === String(q.correct_answer).trim().toLowerCase();
     if (ok) { earned += q.points; correct++; }
-    return { questionId: q.id, correct: ok, correctAnswer: q.correct_answer };
+    return { questionId: q.id, type: q.type, correct: ok, correctAnswer: q.correct_answer };
   });
   const percent = max ? Math.round((earned / max) * 100) : 0;
 

@@ -34,6 +34,19 @@
       } else if (q.type === 'compare') {
         body = `<div class="flex gap-2.5 mt-3">${['>', '<', '='].map(s => `
           <button type="button" data-q="${q.id}" data-val="${s}" class="opt-btn w-14 h-14 rounded-2xl bg-surface-container-low font-headline-lg text-primary">${s}</button>`).join('')}</div>`;
+      } else if (q.type === 'estimate') {
+        body = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+            <div class="p-3 bg-surface-container-low rounded-2xl border border-secondary/30">
+              <span class="text-label-sm text-secondary font-bold block mb-1">Bước 1: Ước lượng (làm tròn hàng chục)</span>
+              <input data-q="${q.id}" data-part="estimate" type="text" inputmode="numeric" placeholder="Số ước lượng..." class="w-full h-12 text-center rounded-xl bg-surface-container-lowest text-primary font-headline-md focus:outline-none focus:ring-2 focus:ring-secondary"/>
+            </div>
+            <div class="p-3 bg-surface-container-low rounded-2xl border border-tertiary/30">
+              <span class="text-label-sm text-tertiary font-bold block mb-1">Bước 2: Kết quả chính xác</span>
+              <input data-q="${q.id}" data-part="exact" type="text" inputmode="numeric" placeholder="Kết quả đúng..." class="w-full h-12 text-center rounded-xl bg-surface-container-lowest text-primary font-headline-md focus:outline-none focus:ring-2 focus:ring-tertiary"/>
+            </div>
+          </div>
+        `;
       } else {
         body = `<input data-q="${q.id}" type="text" inputmode="numeric" placeholder="Điền đáp số..." class="mt-3 w-56 h-14 text-center rounded-2xl bg-surface-container-low text-primary font-headline-lg focus:outline-none focus:ring-4 focus:ring-primary-fixed"/>`;
       }
@@ -50,7 +63,17 @@
         b.classList.toggle('ring-primary-fixed-dim', b === btn));
       updateProgress();
     }));
-    container.querySelectorAll('input[data-q]').forEach(inp => inp.addEventListener('input', () => { answers[inp.dataset.q] = inp.value.trim(); updateProgress(); }));
+    container.querySelectorAll('input[data-q]').forEach(inp => inp.addEventListener('input', () => {
+      const qid = inp.dataset.q;
+      const part = inp.dataset.part;
+      if (part) {
+        if (!answers[qid] || typeof answers[qid] !== 'object') answers[qid] = {};
+        answers[qid][part] = inp.value.trim();
+      } else {
+        answers[qid] = inp.value.trim();
+      }
+      updateProgress();
+    }));
     updateProgress();
   }
 
